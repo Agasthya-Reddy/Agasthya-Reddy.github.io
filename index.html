@@ -143,6 +143,7 @@
     cursor: zoom-in; border-radius: 3px; overflow: hidden; line-height: 0;
   }
   figure img { width: 100%; height: auto; display: block; }
+  #viewer-cap:empty { display: none; }
   figcaption { font-size: 0.85rem; line-height: 1.4; color: var(--muted); margin-top: 0.45rem; }
   @media (max-width: 640px) {
     .row:not(.keep) { flex-direction: column; }
@@ -300,23 +301,24 @@
         <p class="kicker">An autonomous drone that finds the source of a gas leak or fire</p>
       </div>
       <div class="feature">
-        <figure style="--ar:0.806"><button type="button" data-full="hexacopter-flying.jpg"><img src="hexacopter-flying.jpg" width="649" height="805" alt="The hexacopter hovering above an airfield on a clear day, with its sensor payload under the frame"></button><figcaption>The hexacopter in flight.</figcaption></figure>
+        <figure style="--ar:0.806"><button type="button" data-full="hexacopter-flying.jpg"><img src="hexacopter-flying.jpg" width="649" height="805" alt="The hexacopter hovering above an airfield on a clear day, with its sensor payload under the frame"></button></figure>
         <div>
           <div class="p-text">
             <p>When gas leaks or a fire starts, the first question is where it is coming from. I built an autonomous hexacopter that answers it. It carries an electronic nose and a biological sensor, and a Jetson Orin computer on board runs a reward-based machine learning algorithm that senses chemicals in the air and flies toward them until it reaches the source.</p>
+            <p>To train and test it safely, I also created simulation software that recreates a wide variety of chemical compounds in the air, including very dangerous ones that could never be released for real. It models the physics of the air itself: how the wind carries and spreads particles, and how the environment changes the plume. The drone really flies, in real time, and follows the path it thinks is best through the simulated particles, even though there are no actual chemicals in the air. The model trains on what it senses along the way, which lets me optimize the flight path before the drone is ever near a real hazard.</p>
             <p>I also built the mapping software operators watch during a flight. It combines live ArduPilot flight data, GPS, and sensor readings into a 3D view of the plume as it forms, while Intel RealSense depth cameras help the drone spot and avoid obstacles along the way.</p>
           </div>
           <dl class="facts">
-            <dt>Built with</dt><dd>Jetson Orin, ROS2, PyTorch, ArduPilot, Intel RealSense depth cameras</dd>
-            <dt>What it does</dt><dd>Finds a chemical source on its own, avoids obstacles, and maps the plume in 3D</dd>
+            <dt>Built with</dt><dd>Jetson Orin, ROS2, PyTorch, ArduPilot, Intel RealSense depth cameras, plus my own chemical-plume simulator</dd>
+            <dt>What it does</dt><dd>Finds a chemical source on its own, avoids obstacles, and maps the plume in 3D. Flies and trains on simulated plumes, so its flight path can be optimized without releasing real chemicals</dd>
           </dl>
         </div>
       </div>
       <div class="gallery">
-        <div class="row large"><figure style="--ar:1.606"><button type="button" data-full="plume-3d-view.jpg"><img src="plume-3d-view.jpg" width="1600" height="996" alt="Operator view of a 3D city map with a drifting smoke plume and the drone's flight path converging on a marked chemical source"></button><figcaption>The operator view: a live 3D map of the plume with the drone's path to the chemical source.</figcaption></figure></div>
+        <div class="row large"><figure style="--ar:1.606"><button type="button" data-full="plume-3d-view.jpg"><img src="plume-3d-view.jpg" width="1600" height="996" alt="Operator view of a 3D city map with a drifting smoke plume and the drone's flight path converging on a marked chemical source"></button></figure></div>
         <div class="row large">
-          <figure style="--ar:1.99"><button type="button" data-full="hexacopter-flight-plume.jpg"><img src="hexacopter-flight-plume.jpg" width="1400" height="703" loading="lazy" alt="The hexacopter flying over a field while smoke rises in the distance"></button><figcaption>A field test with smoke plumes in the distance.</figcaption></figure>
-          <figure style="--ar:0.924"><button type="button" data-full="hexacopter-ground.jpg"><img src="hexacopter-ground.jpg" width="849" height="919" loading="lazy" alt="The black hexacopter resting on carpet with its sensor payload on top"></button><figcaption>The airframe with its sensor payload.</figcaption></figure>
+          <figure style="--ar:1.99"><button type="button" data-full="hexacopter-flight-plume.jpg"><img src="hexacopter-flight-plume.jpg" width="1400" height="703" loading="lazy" alt="The hexacopter flying over a field while smoke rises in the distance"></button></figure>
+          <figure style="--ar:0.924"><button type="button" data-full="hexacopter-ground.jpg"><img src="hexacopter-ground.jpg" width="849" height="919" loading="lazy" alt="The black hexacopter resting on carpet with its sensor payload on top"></button></figure>
         </div>
       </div>
     </article>
@@ -340,13 +342,13 @@
           </dl>
         </div>
         <div class="gallery">
-          <div class="row medium"><figure style="--ar:1.611"><button type="button" data-full="radar-field-setup.jpg"><img src="radar-field-setup.jpg" width="1400" height="869" loading="lazy" alt="Passive radar dishes and equipment cases in a field with a laptop showing a detection display"></button><figcaption>Field setup with the detection display running on a laptop.</figcaption></figure></div>
+          <div class="row medium"><figure style="--ar:1.611"><button type="button" data-full="radar-field-setup.jpg"><img src="radar-field-setup.jpg" width="1400" height="869" loading="lazy" alt="Passive radar dishes and equipment cases in a field with a laptop showing a detection display"></button></figure></div>
           <div class="row keep">
-            <figure style="--ar:1.333"><button type="button" data-full="radar-dish-camo.jpg"><img src="radar-dish-camo.jpg" width="1400" height="1050" loading="lazy" alt="A radar dish on a stand beside a camouflage-netted case"></button><figcaption>A dish beside camouflaged equipment.</figcaption></figure>
-            <figure style="--ar:1.333"><button type="button" data-full="radar-runway.jpg"><img src="radar-runway.jpg" width="1400" height="1050" loading="lazy" alt="A runway stretching toward the horizon with equipment on either side"></button><figcaption>The runway test site.</figcaption></figure>
-            <figure style="--ar:0.749"><button type="button" data-full="radar-night.jpg"><img src="radar-night.jpg" width="1049" height="1400" loading="lazy" alt="A dish and equipment lit by a green light after dark"></button><figcaption>Testing after dark.</figcaption></figure>
+            <figure style="--ar:1.333"><button type="button" data-full="radar-dish-camo.jpg"><img src="radar-dish-camo.jpg" width="1400" height="1050" loading="lazy" alt="A radar dish on a stand beside a camouflage-netted case"></button></figure>
+            <figure style="--ar:1.333"><button type="button" data-full="radar-runway.jpg"><img src="radar-runway.jpg" width="1400" height="1050" loading="lazy" alt="A runway stretching toward the horizon with equipment on either side"></button></figure>
+            <figure style="--ar:0.749"><button type="button" data-full="radar-night.jpg"><img src="radar-night.jpg" width="1049" height="1400" loading="lazy" alt="A dish and equipment lit by a green light after dark"></button></figure>
           </div>
-          <div class="row medium"><figure style="--ar:1.304"><button type="button" data-full="radar-spectrum.jpg"><img src="radar-spectrum.jpg" width="949" height="728" loading="lazy" alt="SDR++ spectrum plot above a blue waterfall display"></button><figcaption>The SDR++ spectrum and waterfall view.</figcaption></figure></div>
+          <div class="row medium"><figure style="--ar:1.304"><button type="button" data-full="radar-spectrum.jpg"><img src="radar-spectrum.jpg" width="949" height="728" loading="lazy" alt="SDR++ spectrum plot above a blue waterfall display"></button></figure></div>
         </div>
       </div>
     </article>
@@ -389,10 +391,10 @@
           </dl>
         </div>
         <div class="gallery">
-          <div class="row medium"><figure style="--ar:1.852"><button type="button" data-full="lora-flight.jpg"><img src="lora-flight.jpg" width="1091" height="589" loading="lazy" alt="A drone hovering over an open field under a partly cloudy sky"></button><figcaption>Field testing the tracker on a drone.</figcaption></figure></div>
+          <div class="row medium"><figure style="--ar:1.852"><button type="button" data-full="lora-flight.jpg"><img src="lora-flight.jpg" width="1091" height="589" loading="lazy" alt="A drone hovering over an open field under a partly cloudy sky"></button></figure></div>
           <div class="row">
-            <figure style="--ar:1.706"><button type="button" data-full="lora-enclosure.jpg"><img src="lora-enclosure.jpg" width="962" height="564" loading="lazy" alt="The gray tracker enclosure mounted on top of a drone"></button><figcaption>The enclosure mounted on the drone.</figcaption></figure>
-            <figure style="--ar:1.976"><button type="button" data-full="lora-board.jpg"><img src="lora-board.jpg" width="1377" height="697" loading="lazy" alt="The tracker's circuit board with a small display and GPS module wired inside the enclosure"></button><figcaption>Inside the enclosure: the LoRa board and GPS module.</figcaption></figure>
+            <figure style="--ar:1.706"><button type="button" data-full="lora-enclosure.jpg"><img src="lora-enclosure.jpg" width="962" height="564" loading="lazy" alt="The gray tracker enclosure mounted on top of a drone"></button></figure>
+            <figure style="--ar:1.976"><button type="button" data-full="lora-board.jpg"><img src="lora-board.jpg" width="1377" height="697" loading="lazy" alt="The tracker's circuit board with a small display and GPS module wired inside the enclosure"></button></figure>
           </div>
         </div>
       </div>
@@ -416,8 +418,8 @@
         </div>
         <div class="gallery">
           <div class="row">
-            <figure style="--ar:1.761"><button type="button" data-full="bolt-team.jpg"><img src="bolt-team.jpg" width="611" height="347" loading="lazy" alt="The BOLT design team standing in rows in front of the motorcycle"></button><figcaption>The BOLT team.</figcaption></figure>
-            <figure style="--ar:1.918"><button type="button" data-full="bolt-bike.jpg"><img src="bolt-bike.jpg" width="821" height="428" loading="lazy" alt="The electric superbike with its battery pack and orange wiring exposed"></button><figcaption>The bike with its battery pack and harness.</figcaption></figure>
+            <figure style="--ar:1.761"><button type="button" data-full="bolt-team.jpg"><img src="bolt-team.jpg" width="611" height="347" loading="lazy" alt="The BOLT design team standing in rows in front of the motorcycle"></button></figure>
+            <figure style="--ar:1.918"><button type="button" data-full="bolt-bike.jpg"><img src="bolt-bike.jpg" width="821" height="428" loading="lazy" alt="The electric superbike with its battery pack and orange wiring exposed"></button></figure>
           </div>
         </div>
       </div>
@@ -455,12 +457,12 @@
         </div>
         <div class="gallery">
           <div class="row">
-            <figure style="--ar:1.746"><button type="button" data-full="bp-testing.jpg"><img src="bp-testing.jpg" width="1400" height="802" loading="lazy" alt="Me wearing the blood pressure cuff while wired electronics sit on the desk beside a laptop"></button><figcaption>Taking a reading with the prototype.</figcaption></figure>
-            <figure style="--ar:1.81"><button type="button" data-full="bp-breadboard.jpg"><img src="bp-breadboard.jpg" width="1339" height="740" loading="lazy" alt="A breadboard crowded with colored jumper wires and small circuit boards"></button><figcaption>The analog front end on a breadboard.</figcaption></figure>
+            <figure style="--ar:1.746"><button type="button" data-full="bp-testing.jpg"><img src="bp-testing.jpg" width="1400" height="802" loading="lazy" alt="Me wearing the blood pressure cuff while wired electronics sit on the desk beside a laptop"></button></figure>
+            <figure style="--ar:1.81"><button type="button" data-full="bp-breadboard.jpg"><img src="bp-breadboard.jpg" width="1339" height="740" loading="lazy" alt="A breadboard crowded with colored jumper wires and small circuit boards"></button></figure>
           </div>
           <div class="row keep narrow">
-            <figure style="--ar:0.4496"><button type="button" data-full="bp-app-dashboard.jpg"><img src="bp-app-dashboard.jpg" width="514" height="1143" loading="lazy" alt="Phone screen showing systolic, mean arterial, diastolic, and heart rate readings with an assistant chat below"></button><figcaption>Live readings and the assistant.</figcaption></figure>
-            <figure style="--ar:0.4515"><button type="button" data-full="bp-app-stats.jpg"><img src="bp-app-stats.jpg" width="507" height="1123" loading="lazy" alt="Phone screen showing average readings and a history list with stage labels"></button><figcaption>Averages and history.</figcaption></figure>
+            <figure style="--ar:0.4496"><button type="button" data-full="bp-app-dashboard.jpg"><img src="bp-app-dashboard.jpg" width="514" height="1143" loading="lazy" alt="Phone screen showing systolic, mean arterial, diastolic, and heart rate readings with an assistant chat below"></button></figure>
+            <figure style="--ar:0.4515"><button type="button" data-full="bp-app-stats.jpg"><img src="bp-app-stats.jpg" width="507" height="1123" loading="lazy" alt="Phone screen showing average readings and a history list with stage labels"></button></figure>
           </div>
         </div>
       </div>
@@ -484,12 +486,12 @@
         </div>
         <div class="gallery">
           <div class="row small keep">
-            <figure style="--ar:0.774"><button type="button" data-full="fpv-pcb-layout.jpg"><img src="fpv-pcb-layout.jpg" width="407" height="526" loading="lazy" alt="PCB layout of the ESP32 flight controller with colored routing traces"></button><figcaption>PCB layout.</figcaption></figure>
-            <figure style="--ar:0.769"><button type="button" data-full="fpv-pcb-render.jpg"><img src="fpv-pcb-render.jpg" width="349" height="454" loading="lazy" alt="Black render of the flight controller board showing component labels"></button><figcaption>Board render.</figcaption></figure>
+            <figure style="--ar:0.774"><button type="button" data-full="fpv-pcb-layout.jpg"><img src="fpv-pcb-layout.jpg" width="407" height="526" loading="lazy" alt="PCB layout of the ESP32 flight controller with colored routing traces"></button></figure>
+            <figure style="--ar:0.769"><button type="button" data-full="fpv-pcb-render.jpg"><img src="fpv-pcb-render.jpg" width="349" height="454" loading="lazy" alt="Black render of the flight controller board showing component labels"></button></figure>
           </div>
           <div class="row medium">
-            <figure style="--ar:2.308"><button type="button" data-full="fpv-drone.jpg"><img src="fpv-drone.jpg" width="674" height="292" loading="lazy" alt="The assembled carbon-fiber FPV drone on a table"></button><figcaption>The finished frame.</figcaption></figure>
-            <figure style="--ar:1.994"><button type="button" data-full="fpv-schematic.jpg"><img src="fpv-schematic.jpg" width="720" height="361" loading="lazy" alt="Circuit schematic of the flight controller in a design tool"></button><figcaption>The schematic.</figcaption></figure>
+            <figure style="--ar:2.308"><button type="button" data-full="fpv-drone.jpg"><img src="fpv-drone.jpg" width="674" height="292" loading="lazy" alt="The assembled carbon-fiber FPV drone on a table"></button></figure>
+            <figure style="--ar:1.994"><button type="button" data-full="fpv-schematic.jpg"><img src="fpv-schematic.jpg" width="720" height="361" loading="lazy" alt="Circuit schematic of the flight controller in a design tool"></button></figure>
           </div>
         </div>
       </div>
@@ -512,7 +514,7 @@
           </dl>
         </div>
         <div class="gallery">
-          <div class="row small"><figure style="--ar:0.873"><button type="button" data-full="helmet.jpg"><img src="helmet.jpg" width="275" height="315" loading="lazy" alt="Red and silver Iron Man helmet with a textured gray faceplate"></button><figcaption>The finished helmet.</figcaption></figure></div>
+          <div class="row small"><figure style="--ar:0.873"><button type="button" data-full="helmet.jpg"><img src="helmet.jpg" width="275" height="315" loading="lazy" alt="Red and silver Iron Man helmet with a textured gray faceplate"></button></figure></div>
         </div>
       </div>
     </article>
