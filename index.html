@@ -14,18 +14,23 @@
   /* ---- Tokens: change colors and fonts here ---- */
   :root {
     --bg: #f6f7f5;
+    --band: #e8edf0;
     --ink: #1a222c;
-    --muted: #596574;
-    --line: #d9dee3;
+    --muted: #536070;
+    --line: #cfd6dc;
     --panel: #ecefed;
     --accent: #0e7490;
+    --on-accent: #ffffff;
+    --contact-bg: #0f2c36;
+    --contact-ink: #e9f3f6;
     --display: "Fraunces", Georgia, "Times New Roman", serif;
     --text: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #12171d; --ink: #e6eaee; --muted: #9aa5b2;
-      --line: #2a323b; --panel: #1a2129; --accent: #5cbad0;
+      --bg: #12171d; --band: #181f27; --ink: #e6eaee; --muted: #9aa5b2;
+      --line: #2c353f; --panel: #1d252e; --accent: #5cbad0; --on-accent: #0b1217;
+      --contact-bg: #0a1d24; --contact-ink: #e9f3f6;
     }
   }
   * { box-sizing: border-box; }
@@ -38,53 +43,100 @@
   }
   a { color: var(--accent); text-underline-offset: 3px; }
   a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
-  .wrap { width: min(1040px, 100% - 2.5rem); margin-inline: auto; }
+  .wrap { width: min(1080px, 100% - 2.5rem); margin-inline: auto; }
+  section[id], article[id] { scroll-margin-top: 4.5rem; }
 
-  /* ---- Top ---- */
-  .top { padding: 1.25rem 0; }
-  .top nav { display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; font-size: 0.95rem; }
-  .top nav a { color: var(--muted); text-decoration: none; }
-  .top nav a:hover { color: var(--ink); text-decoration: underline; }
+  /* ---- Sticky top bar ---- */
+  .bar { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .bar-in { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.6rem; }
+  .vt { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+  .vt img { height: 40px; width: auto; display: block; border-radius: 2px; }
+  .vt img[hidden] { display: none; }
+  .bar nav { display: flex; align-items: center; gap: 0.25rem 1.4rem; flex-wrap: wrap; justify-content: flex-end; font-size: 0.95rem; }
+  .bar nav a:not(.btn) { color: var(--muted); text-decoration: none; padding: 0.25rem 0; border-bottom: 2px solid transparent; }
+  .bar nav a:not(.btn):hover { color: var(--ink); }
+  .bar nav a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+  @media (max-width: 640px) { .bar nav a.hide-sm { display: none; } }
 
-  .hero { padding: clamp(2.5rem, 7vw, 5rem) 0 clamp(2rem, 5vw, 3.5rem); }
+  /* ---- Buttons ---- */
+  .btn {
+    display: inline-block; padding: 0.7rem 1.25rem; border: 1.5px solid var(--ink); border-radius: 4px;
+    color: var(--ink); text-decoration: none; font-weight: 600; font-size: 1rem; line-height: 1.2; background: transparent;
+  }
+  .btn:hover { background: var(--panel); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .btn.primary:hover { filter: brightness(1.08); background: var(--accent); }
+  .btn.small { padding: 0.45rem 0.95rem; font-size: 0.92rem; }
+
+  /* ---- Bands ---- */
+  .band { padding: clamp(3rem, 7vw, 5rem) 0; }
+  .band.alt { background: var(--band); border-block: 1px solid var(--line); }
+  h2 {
+    font-family: var(--display); font-weight: 600; font-size: clamp(1.9rem, 4.2vw, 2.7rem);
+    letter-spacing: -0.015em; line-height: 1.12; margin: 0 0 0.5rem;
+  }
+  .section-note { color: var(--muted); margin: 0 0 0.5rem; max-width: 42rem; }
+
+  /* ---- Hero ---- */
+  .hero { padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(3rem, 7vw, 5rem); }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, 21rem); gap: 2.5rem 4rem; align-items: center; }
   h1 {
-    font-family: var(--display); font-weight: 600; font-size: clamp(2.9rem, 9vw, 6rem);
+    font-family: var(--display); font-weight: 600; font-size: clamp(2.9rem, 9vw, 5.6rem);
     line-height: 0.98; letter-spacing: -0.03em; margin: 0 0 1.4rem;
   }
-  .lede { font-size: clamp(1.15rem, 2.4vw, 1.45rem); line-height: 1.5; max-width: 38rem; margin: 0 0 1.5rem; }
-  .meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; margin: 0; padding: 0; list-style: none; color: var(--muted); font-size: 0.97rem; }
-  .meta a { color: var(--ink); }
+  .lede { font-size: clamp(1.15rem, 2.4vw, 1.45rem); line-height: 1.5; max-width: 36rem; margin: 0 0 1.6rem; }
+  .cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.6rem; }
+  .meta { color: var(--muted); font-size: 0.97rem; margin: 0; max-width: 34rem; }
+  .portrait { margin: 0; }
+  .portrait img { width: 100%; height: auto; display: block; border-radius: 4px; border: 1px solid var(--line); }
+  @media (max-width: 760px) { .hero-grid { grid-template-columns: 1fr; } .portrait { max-width: 20rem; } }
 
-  /* ---- Sections ---- */
-  section.group { padding-top: clamp(2.5rem, 6vw, 4rem); }
-  h2 {
-    font-family: var(--display); font-weight: 600; font-size: clamp(1.8rem, 4vw, 2.5rem);
-    letter-spacing: -0.015em; line-height: 1.15; margin: 0 0 0.4rem;
-    padding-bottom: 0.9rem; border-bottom: 1px solid var(--line);
-  }
-  .group-note { color: var(--muted); margin: 0.9rem 0 0; max-width: 40rem; }
+  /* ---- About ---- */
+  .about { display: grid; grid-template-columns: minmax(0, 40rem) minmax(15rem, 1fr); gap: 2rem 4rem; margin-top: 1.5rem; align-items: start; }
+  .about p { margin: 0 0 1rem; }
+  @media (max-width: 800px) { .about { grid-template-columns: 1fr; } }
 
-  article.project { padding-top: clamp(2.4rem, 5vw, 3.6rem); }
-  h3 {
-    font-family: var(--display); font-weight: 600; font-size: clamp(1.45rem, 3vw, 1.9rem);
-    line-height: 1.2; letter-spacing: -0.01em; margin: 0 0 0.35rem;
-  }
-  .kicker { margin: 0 0 1.1rem; color: var(--muted); font-size: 0.95rem; }
-  .body { display: grid; grid-template-columns: minmax(0, 40rem) minmax(15rem, 1fr); gap: 1.5rem 3rem; align-items: start; }
-  .body p { margin: 0 0 1rem; }
-  .body p:last-child { margin-bottom: 0; }
-  dl.facts { margin: 0; padding-left: 1.25rem; border-left: 2px solid var(--line); font-size: 0.95rem; line-height: 1.5; }
+  dl.facts { margin: 0; padding-left: 1.25rem; border-left: 3px solid var(--accent); font-size: 0.95rem; line-height: 1.5; }
   dl.facts dt { font-weight: 600; margin: 0 0 0.15rem; }
   dl.facts dd { margin: 0 0 1rem; color: var(--muted); }
   dl.facts dd:last-child { margin-bottom: 0; }
-  @media (max-width: 760px) { .body { grid-template-columns: 1fr; } dl.facts { padding-left: 1rem; } }
+
+  /* ---- Projects ---- */
+  .projects { margin-top: 2rem; }
+  article.project {
+    display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 1.25rem 3rem;
+    padding: 2.75rem 0; border-top: 1px solid var(--line);
+  }
+  .p-head { position: sticky; top: 5.2rem; align-self: start; }
+  h3 { font-family: var(--display); font-weight: 600; font-size: clamp(1.4rem, 2.6vw, 1.7rem); line-height: 1.2; letter-spacing: -0.01em; margin: 0 0 0.45rem; }
+  .kicker { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.45; }
+  .p-main > p, .p-text p { margin: 0 0 1rem; }
+  .p-main > p:last-child { margin-bottom: 0; }
+  .body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(13rem, 17rem); gap: 1.5rem 2.5rem; align-items: start; }
+  .p-text { max-width: 40rem; }
+  .p-text p:last-child { margin-bottom: 0; }
+
+  /* Featured first project: full width, big drone photo beside the text */
+  article.project.flagship { display: block; border-top: 0; padding-top: 1.5rem; }
+  .flagship .p-head { position: static; margin-bottom: 1.5rem; }
+  .flagship h3 { font-size: clamp(1.7rem, 3.4vw, 2.3rem); }
+  .feature { display: grid; grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); gap: 1.5rem 3rem; align-items: start; }
+  .feature .p-text p { margin-bottom: 1rem; }
+  .feature dl.facts { margin-top: 1.5rem; }
+  @media (max-width: 860px) {
+    article.project { grid-template-columns: 1fr; gap: 1rem; padding: 2.25rem 0; }
+    .p-head { position: static; }
+    .body { grid-template-columns: 1fr; }
+    .feature { grid-template-columns: 1fr; }
+  }
 
   /* ---- Galleries: images in a row share one height ---- */
   .gallery { margin-top: 1.6rem; display: grid; gap: 0.9rem; }
   .row { display: flex; gap: 0.9rem; align-items: flex-start; }
-  .row.narrow { max-width: 460px; }
-  .row.medium { max-width: 640px; }
-  .row.small  { max-width: 380px; }
+  .row.large { max-width: 900px; }
+  .row.medium { max-width: 600px; }
+  .row.narrow { max-width: 440px; }
+  .row.small  { max-width: 360px; }
   figure { margin: 0; flex: var(--ar, 1.5) 1 0; min-width: 0; }
   figure button {
     display: block; width: 100%; padding: 0; border: 0; background: var(--panel);
@@ -97,13 +149,70 @@
     .row:not(.keep) figure { flex: none; width: 100%; }
   }
 
-  /* ---- Leadership + contact ---- */
-  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 2rem 3rem; padding-top: 1.6rem; }
-  .two h3 { font-size: 1.25rem; }
+  /* ---- Leadership ---- */
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 2rem 3rem; margin-top: 1.75rem; }
+  .two h3 { font-size: 1.3rem; }
   .two p { margin: 0.4rem 0 0; }
-  footer { margin-top: clamp(3rem, 7vw, 5rem); padding: 2rem 0 3rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.95rem; }
-  footer p { margin: 0 0 0.5rem; max-width: 40rem; }
-  footer .big { font-family: var(--display); font-weight: 600; color: var(--ink); font-size: clamp(1.4rem, 3.2vw, 2rem); line-height: 1.25; margin-bottom: 0.8rem; }
+
+  /* ---- Contact ---- */
+  .contact { background: var(--contact-bg); color: var(--contact-ink); padding: clamp(3.5rem, 8vw, 6rem) 0; }
+  .contact h2 { color: var(--contact-ink); }
+  .contact p { max-width: 36rem; margin: 0 0 1.5rem; font-size: 1.15rem; line-height: 1.55; }
+  .contact .big-email {
+    display: inline-block; font-family: var(--display); font-weight: 600; font-size: clamp(1.4rem, 4.6vw, 2.5rem);
+    color: var(--contact-ink); text-decoration-thickness: 2px; margin-bottom: 1.75rem; overflow-wrap: anywhere;
+  }
+  .contact .cta { margin: 0; }
+  .contact .btn { color: var(--contact-ink); border-color: var(--contact-ink); }
+  .contact .btn:hover { background: rgba(255, 255, 255, 0.12); }
+  .contact .btn.primary { background: #ffffff; border-color: #ffffff; color: #0f2c36; }
+  .contact .btn.primary:hover { background: #e4eef1; }
+  .contact a:focus-visible { outline-color: #ffffff; }
+  .foot { padding: 1.25rem 0 2rem; color: var(--muted); font-size: 0.9rem; }
+  .foot p { margin: 0; }
+
+
+  /* ---- Spectrum strip (decorative SDR display) ---- */
+  .spectrum { background: #07131d; border-bottom: 1px solid #12303f; color: #8fb8c4; }
+  .spectrum canvas { display: block; width: 100%; height: 96px; cursor: crosshair; touch-action: pan-y; }
+
+  .hero { position: relative; overflow: hidden; }
+  .hero-grid { position: relative; z-index: 1; }
+
+
+
+  /* ---- Hero: low-poly terrain with a hexacopter flying over it (faded behind the text) ---- */
+  #terrain-bg { position: absolute; top: 0; bottom: 0; left: 36%; width: 64%; height: 100%; z-index: 0; pointer-events: none; }
+  @media (max-width: 760px) { #terrain-bg { left: 0; width: 100%; } }
+  /* static veil (cheap): quiets the terrain behind the text, lets it show on the right */
+  .hero::after {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: linear-gradient(90deg, transparent 0%, var(--bg) 36%, color-mix(in srgb, var(--bg) 62%, transparent) 58%, transparent 84%);
+  }
+  @media (max-width: 760px) { .hero::after { background: color-mix(in srgb, var(--bg) 78%, transparent); } }
+
+  /* ---- Hero: name with a small portrait beside it ---- */
+  .hero-inner { position: relative; z-index: 1; }
+  .name-row { display: flex; align-items: center; gap: clamp(1rem, 2.6vw, 1.75rem); margin-bottom: 1.4rem; }
+  .name-row h1 { margin: 0; min-width: 0; }
+  .avatar { flex: none; width: clamp(68px, 8vw, 104px); height: auto; border-radius: 6px; border: 1px solid var(--line); display: block; }
+
+
+  /* ---- Quiet flight readout (decorative, changes with scroll) ---- */
+  .hud {
+    position: fixed; left: 1rem; bottom: 1rem; z-index: 15; display: flex; align-items: center; gap: 0.9rem;
+    background: rgba(7, 19, 29, 0.9); color: #d7ebf0; border: 1px solid #12303f; border-radius: 4px;
+    padding: 0.5rem 0.55rem 0.5rem 0.8rem; font-size: 0.72rem; line-height: 1.25;
+  }
+  .hud[hidden] { display: none; }
+  .hud-row { display: flex; gap: 1rem; }
+  .hud .k { display: block; color: #8fb8c4; }
+  .hud .v { display: block; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 3.2rem; }
+  .hud .v.state { min-width: 4.6rem; }
+  .hud-x { border: 0; background: transparent; color: #8fb8c4; font: inherit; font-size: 1rem; line-height: 1; padding: 0.2rem 0.35rem; cursor: pointer; border-radius: 3px; }
+  .hud-x:hover { color: #fff; }
+  .hud-x:focus-visible { outline: 2px solid #5fd4e6; outline-offset: 1px; }
+  @media (max-width: 720px) { .hud { display: none; } }
 
   /* ---- Lightbox ---- */
   dialog { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 96vh; color: #fff; }
@@ -118,51 +227,95 @@
 </head>
 <body>
 
-<div class="wrap">
-  <header class="top">
+<header class="bar">
+  <div class="wrap bar-in">
+    <a class="vt" href="https://vt.edu" aria-label="Virginia Tech">
+      <!-- To show the official logo: get approval, then upload it to the repo as vt-logo.png (see notes). -->
+      <img src="vt-logo.png" alt="Virginia Tech" hidden onload="this.hidden=false; this.nextElementSibling.hidden=true">
+      <span>Virginia Tech</span>
+    </a>
     <nav aria-label="Sections">
-      <a href="#work">Professional work</a>
-      <a href="#fun">Built for fun</a>
-      <a href="#leadership">Leadership</a>
-      <a href="#contact">Contact</a>
+      <a class="hide-sm" href="#about">About</a>
+      <a class="hide-sm" href="#work">Work</a>
+      <a class="hide-sm" href="#fun">Built for fun</a>
+      <a class="hide-sm" href="#leadership">Leadership</a>
+      <a class="btn primary small" href="#contact">Contact</a>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <section class="hero">
-    <h1>Agasthya Reddy</h1>
+<div class="spectrum" id="spectrum">
+  <canvas id="spec" aria-hidden="true"></canvas>
+</div>
+
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="band hero" id="top">
+  <canvas id="terrain-bg" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
+    <div class="name-row">
+      <h1>Agasthya Reddy</h1>
+      <img class="avatar" src="portrait.jpg" width="637" height="931" alt="Me smiling and making a peace sign at a motor race, with a red Ferrari flag flying behind me">
+    </div>
     <p class="lede">I build the hardware, firmware, and machine learning that lets drones, radios, and vehicles sense what is around them and act on it.</p>
-    <ul class="meta">
-      <li>Computer engineering at Virginia Tech, expected December 2027</li>
-      <li>Controls, robotics, and autonomy, with a focus on machine learning</li>
-      <li><a href="mailto:agasthyabreddy@gmail.com">agasthyabreddy@gmail.com</a></li>
-      <li><a href="https://www.linkedin.com/in/agasthya-reddy">LinkedIn</a></li>
-    </ul>
-  </section>
+    <div class="cta">
+        <a class="btn primary" href="mailto:agasthyabreddy@gmail.com">Email me</a>
+        <a class="btn" href="https://www.linkedin.com/in/agasthya-reddy">LinkedIn</a>
+        <a class="btn" href="#work">See my work</a>
+      </div>
+    <p class="meta">Computer engineering student at Virginia Tech, graduating December 2027. Focused on controls, robotics, and autonomy, with machine learning as a secondary focus.</p>
+  </div>
+</section>
 
-  <main>
-  <!-- ===================== PROFESSIONAL WORK ===================== -->
-  <section class="group" id="work" aria-labelledby="work-h">
+<!-- ===================== ABOUT ===================== -->
+<section class="band alt" id="about" aria-labelledby="about-h">
+  <div class="wrap">
+    <h2 id="about-h">About me</h2>
+    <div class="about">
+      <div>
+        <p>I'm a computer engineering student at Virginia Tech, focused on controls, robotics, and autonomy. I love working on both the hardware and the software, and taking a project from start to finish: the circuit, the firmware, the machine learning, and the pipeline that ties them all together. I want real domain knowledge in every part of a project, not just one piece of it.</p>
+        <p>I'm happiest outdoors, whether that's camping or snowboarding. I love doing everything hands on, tinkering, and fixing anything I can get my hands on.</p>
+      </div>
+      <dl class="facts">
+        <dt>Studying</dt><dd>B.S. in Computer Engineering at Virginia Tech, expected December 2027</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROFESSIONAL WORK ===================== -->
+<section class="band" id="work" aria-labelledby="work-h">
+  <div class="wrap">
     <h2 id="work-h">Professional work</h2>
-    <p class="group-note">Projects from my R&amp;D internship at A2 Labs, plus my work on Virginia Tech's electric superbike team.</p>
+    <p class="section-note">Projects from my R&amp;D internship at A2 Labs, plus my work on Virginia Tech's electric superbike team.</p>
 
-    <!-- Hexacopter -->
-    <article class="project" id="plume">
-      <h3>Chemical-plume-tracking drone</h3>
-      <p class="kicker">Autonomous hexacopter, built from scratch</p>
-      <div class="body">
+    <div class="projects">
+
+    <!-- Hexacopter (featured) -->
+    <article class="project flagship" id="plume">
+      <div class="p-head">
+        <h3>Chemical-plume-tracking drone</h3>
+        <p class="kicker">An autonomous drone that finds the source of a gas leak or fire</p>
+      </div>
+      <div class="feature">
+        <figure style="--ar:0.806"><button type="button" data-full="hexacopter-flying.jpg"><img src="hexacopter-flying.jpg" width="649" height="805" alt="The hexacopter hovering above an airfield on a clear day, with its sensor payload under the frame"></button><figcaption>The hexacopter in flight.</figcaption></figure>
         <div>
-          <p>Built an autonomous hexacopter drone from scratch with an electronic-nose and biological sensor unit. Onboard Jetson Orin edge compute runs a reward-based ML algorithm that detects airborne chemical compounds and autonomously tracks them to their source. It is useful for finding the sources of gas leaks and fires without a person in the loop.</p>
-          <p>A georeferenced 3D mapping tool combines live ArduPilot telemetry, GPS, and sensor readings so operators can watch the plume take shape while the drone works.</p>
+          <div class="p-text">
+            <p>When gas leaks or a fire starts, the first question is where it is coming from. I built an autonomous hexacopter that answers it. It carries an electronic nose and a biological sensor, and a Jetson Orin computer on board runs a reward-based machine learning algorithm that senses chemicals in the air and flies toward them until it reaches the source.</p>
+            <p>I also built the mapping software operators watch during a flight. It combines live ArduPilot flight data, GPS, and sensor readings into a 3D view of the plume as it forms, while Intel RealSense depth cameras help the drone spot and avoid obstacles along the way.</p>
+          </div>
+          <dl class="facts">
+            <dt>Built with</dt><dd>Jetson Orin, ROS2, PyTorch, ArduPilot, Intel RealSense depth cameras</dd>
+            <dt>What it does</dt><dd>Finds a chemical source on its own, avoids obstacles, and maps the plume in 3D</dd>
+          </dl>
         </div>
-        <dl class="facts">
-          <dt>Built with</dt><dd>Jetson Orin, ROS2, PyTorch, ArduPilot, Intel RealSense depth cameras</dd>
-          <dt>What it does</dt><dd>Finds a chemical source on its own, avoids obstacles on the way, and maps the plume in 3D</dd>
-        </dl>
       </div>
       <div class="gallery">
-        <div class="row"><figure style="--ar:1.606"><button type="button" data-full="plume-3d-view.jpg"><img src="plume-3d-view.jpg" width="1600" height="996" alt="Operator view of a 3D city map with a drifting smoke plume and the drone's flight path converging on a marked chemical source"></button><figcaption>The operator view: a live 3D map of the plume with the drone's path to the chemical source.</figcaption></figure></div>
-        <div class="row">
-          <figure style="--ar:1.99"><button type="button" data-full="hexacopter-flight-plume.jpg"><img src="hexacopter-flight-plume.jpg" width="1400" height="703" loading="lazy" alt="The hexacopter flying over a field while smoke rises in the distance"></button><figcaption>In flight over a field test with smoke plumes in the distance.</figcaption></figure>
+        <div class="row large"><figure style="--ar:1.606"><button type="button" data-full="plume-3d-view.jpg"><img src="plume-3d-view.jpg" width="1600" height="996" alt="Operator view of a 3D city map with a drifting smoke plume and the drone's flight path converging on a marked chemical source"></button><figcaption>The operator view: a live 3D map of the plume with the drone's path to the chemical source.</figcaption></figure></div>
+        <div class="row large">
+          <figure style="--ar:1.99"><button type="button" data-full="hexacopter-flight-plume.jpg"><img src="hexacopter-flight-plume.jpg" width="1400" height="703" loading="lazy" alt="The hexacopter flying over a field while smoke rises in the distance"></button><figcaption>A field test with smoke plumes in the distance.</figcaption></figure>
           <figure style="--ar:0.924"><button type="button" data-full="hexacopter-ground.jpg"><img src="hexacopter-ground.jpg" width="849" height="919" loading="lazy" alt="The black hexacopter resting on carpet with its sensor payload on top"></button><figcaption>The airframe with its sensor payload.</figcaption></figure>
         </div>
       </div>
@@ -170,190 +323,246 @@
 
     <!-- Passive radar -->
     <article class="project" id="radar">
-      <h3>Passive radar using Starlink signals</h3>
-      <p class="kicker">Field-tested at T-REX 26-3, the Department of War's Technology Readiness Experimentation event</p>
-      <div class="body">
-        <div>
-          <p>Built the software-defined-radio pipeline (USRP B210, RTL-SDR V4, GNU Radio, and SDR++) and a CFAR detection algorithm that resolves every Starlink Ku-band downlink channel, so every Starlink satellite overhead can be detected passively.</p>
-          <p>With passive radar dishes, that same information lets us detect drone swarms without transmitting anything. We deployed and tested the system at T-REX 26-3.</p>
-        </div>
-        <dl class="facts">
-          <dt>Result</dt><dd>Passive drone detection at distances up to 5 km</dd>
-          <dt>Signal processing</dt><dd>CFAR detection across 12 downlink channels spaced 250 MHz apart</dd>
-          <dt>Hardware</dt><dd>USRP B210, RTL-SDR V4, Kymeta Skyhawk u8 terminal</dd>
-        </dl>
+      <div class="p-head">
+        <h3>Passive radar using Starlink signals</h3>
+        <p class="kicker">Field-tested at T-REX 26-3, the Department of War's Technology Readiness Experimentation event</p>
       </div>
-      <div class="gallery">
-        <div class="row medium"><figure style="--ar:1.611"><button type="button" data-full="radar-field-setup.jpg"><img src="radar-field-setup.jpg" width="1400" height="869" loading="lazy" alt="Passive radar dishes and equipment cases in a field with a laptop showing a detection display"></button><figcaption>Field setup with the detection display running on a laptop.</figcaption></figure></div>
-        <div class="row keep">
-          <figure style="--ar:1.333"><button type="button" data-full="radar-dish-camo.jpg"><img src="radar-dish-camo.jpg" width="1400" height="1050" loading="lazy" alt="A radar dish on a stand beside a camouflage-netted case"></button><figcaption>A dish beside camouflaged equipment.</figcaption></figure>
-          <figure style="--ar:1.333"><button type="button" data-full="radar-runway.jpg"><img src="radar-runway.jpg" width="1400" height="1050" loading="lazy" alt="A runway stretching toward the horizon with equipment on either side"></button><figcaption>The runway test site.</figcaption></figure>
-          <figure style="--ar:0.749"><button type="button" data-full="radar-night.jpg"><img src="radar-night.jpg" width="1049" height="1400" loading="lazy" alt="A dish and equipment lit by a green light after dark"></button><figcaption>Testing after dark.</figcaption></figure>
+      <div class="p-main">
+        <div class="body">
+          <div class="p-text">
+            <p>Regular radar sends out a signal and listens for the echo, which also gives away where the radar is. Passive radar sends nothing. I built the receiving system that picks out each Starlink satellite's Ku-band downlink channels, so we know which satellites are overhead.</p>
+            <p>Combined with passive radar dishes, that lets us detect drone swarms without transmitting anything ourselves. The system uses USRP B210 and RTL-SDR V4 radios with GNU Radio and SDR++, and a CFAR algorithm, which sets an adaptive detection threshold, separates real signals from background noise.</p>
+          </div>
+          <dl class="facts">
+            <dt>Result</dt><dd>Passive drone detection at distances up to 5 km</dd>
+            <dt>Signal processing</dt><dd>CFAR detection across 12 downlink channels spaced 250 MHz apart</dd>
+            <dt>Hardware</dt><dd>USRP B210, RTL-SDR V4, Kymeta Skyhawk u8 terminal</dd>
+          </dl>
         </div>
-        <div class="row medium"><figure style="--ar:1.304"><button type="button" data-full="radar-spectrum.jpg"><img src="radar-spectrum.jpg" width="949" height="728" loading="lazy" alt="SDR++ spectrum plot above a blue waterfall display"></button><figcaption>The SDR++ spectrum and waterfall view.</figcaption></figure></div>
+        <div class="gallery">
+          <div class="row medium"><figure style="--ar:1.611"><button type="button" data-full="radar-field-setup.jpg"><img src="radar-field-setup.jpg" width="1400" height="869" loading="lazy" alt="Passive radar dishes and equipment cases in a field with a laptop showing a detection display"></button><figcaption>Field setup with the detection display running on a laptop.</figcaption></figure></div>
+          <div class="row keep">
+            <figure style="--ar:1.333"><button type="button" data-full="radar-dish-camo.jpg"><img src="radar-dish-camo.jpg" width="1400" height="1050" loading="lazy" alt="A radar dish on a stand beside a camouflage-netted case"></button><figcaption>A dish beside camouflaged equipment.</figcaption></figure>
+            <figure style="--ar:1.333"><button type="button" data-full="radar-runway.jpg"><img src="radar-runway.jpg" width="1400" height="1050" loading="lazy" alt="A runway stretching toward the horizon with equipment on either side"></button><figcaption>The runway test site.</figcaption></figure>
+            <figure style="--ar:0.749"><button type="button" data-full="radar-night.jpg"><img src="radar-night.jpg" width="1049" height="1400" loading="lazy" alt="A dish and equipment lit by a green light after dark"></button><figcaption>Testing after dark.</figcaption></figure>
+          </div>
+          <div class="row medium"><figure style="--ar:1.304"><button type="button" data-full="radar-spectrum.jpg"><img src="radar-spectrum.jpg" width="949" height="728" loading="lazy" alt="SDR++ spectrum plot above a blue waterfall display"></button><figcaption>The SDR++ spectrum and waterfall view.</figcaption></figure></div>
+        </div>
       </div>
     </article>
 
     <!-- Camera + radar fusion -->
     <article class="project" id="fusion">
-      <h3>Camera and radar fusion for drone swarm detection</h3>
-      <p class="kicker">Detection and tracking system</p>
-      <div class="body">
-        <div>
-          <p>Built a pan-tilt-zoom camera system that runs inference locally on a Jetson AGX to detect high-speed drones. It estimates each drone's size, speed, altitude, heading, and payload, and logs every track to a SQL database.</p>
-          <p>A custom model, served through an internal API, fuses the camera, radar, and telemetry data to support late-stage swarm detection.</p>
+      <div class="p-head">
+        <h3>Camera and radar fusion for drone swarm detection</h3>
+        <p class="kicker">A tracking system that combines several sensors</p>
+      </div>
+      <div class="p-main">
+        <div class="body">
+          <div class="p-text">
+            <p>To spot fast-moving drones by sight, I built a pan-tilt-zoom camera that runs its detection model locally on a Jetson AGX. For every drone it finds, it estimates size, speed, altitude, heading, and payload, and saves the track to a SQL database.</p>
+            <p>A custom model, served through an internal API, then combines the camera, radar, and telemetry data so the system can recognize a swarm in its late stages.</p>
+          </div>
+          <dl class="facts">
+            <dt>Result</dt><dd>96% effectiveness for late-stage swarm detection</dd>
+            <dt>Built with</dt><dd>Jetson AGX, SQL, a custom fusion model behind an internal API</dd>
+          </dl>
         </div>
-        <dl class="facts">
-          <dt>Result</dt><dd>96% effectiveness for late-stage swarm detection</dd>
-          <dt>Built with</dt><dd>Jetson AGX, SQL, a custom fusion model behind an internal API</dd>
-        </dl>
       </div>
     </article>
 
     <!-- LoRa -->
     <article class="project" id="lora">
-      <h3>Long-range LoRa telemetry module</h3>
-      <p class="kicker">Solo build</p>
-      <div class="body">
-        <div>
-          <p>Designed a self-contained telemetry tracker on custom firmware. A LoRa link fuses GPS, barometric, and IMU data to localize an asset in 3D space, and the module talks to any laptop over serial.</p>
-          <p>You can strap it onto almost anything that moves and it phones home with full telemetry from kilometers away, even if the thing it rides on has no telemetry of its own.</p>
-        </div>
-        <dl class="facts">
-          <dt>Result</dt><dd>Localizes assets to 1 m at 10 km range, deployed company-wide</dd>
-          <dt>Built with</dt><dd>Custom STM32 firmware, LoRa, GPS, barometer, IMU</dd>
-        </dl>
+      <div class="p-head">
+        <h3>Long-range LoRa telemetry module</h3>
+        <p class="kicker">Solo build: a tracker that reports its position from kilometers away</p>
       </div>
-      <div class="gallery">
-        <div class="row medium"><figure style="--ar:1.852"><button type="button" data-full="lora-flight.jpg"><img src="lora-flight.jpg" width="1091" height="589" loading="lazy" alt="A drone hovering over an open field under a partly cloudy sky"></button><figcaption>Field testing the tracker on a drone.</figcaption></figure></div>
-        <div class="row">
-          <figure style="--ar:1.706"><button type="button" data-full="lora-enclosure.jpg"><img src="lora-enclosure.jpg" width="962" height="564" loading="lazy" alt="The gray tracker enclosure mounted on top of a drone"></button><figcaption>The enclosure mounted on the drone.</figcaption></figure>
-          <figure style="--ar:1.976"><button type="button" data-full="lora-board.jpg"><img src="lora-board.jpg" width="1377" height="697" loading="lazy" alt="The tracker's circuit board with a small display and GPS module wired inside the enclosure"></button><figcaption>Inside the enclosure: the LoRa board and GPS module.</figcaption></figure>
+      <div class="p-main">
+        <div class="body">
+          <div class="p-text">
+            <p>I designed a small, self-contained tracker you can strap onto almost anything that moves, even something with no telemetry of its own. It sends its full position data back over a long-range LoRa radio link from kilometers away.</p>
+            <p>It combines GPS, barometer, and IMU readings to place the asset in 3D space, runs on custom firmware, and plugs into any laptop over serial.</p>
+          </div>
+          <dl class="facts">
+            <dt>Result</dt><dd>Localizes assets to 1 m at 10 km range, deployed company-wide</dd>
+            <dt>Built with</dt><dd>Custom STM32 firmware, LoRa, GPS, barometer, IMU</dd>
+          </dl>
+        </div>
+        <div class="gallery">
+          <div class="row medium"><figure style="--ar:1.852"><button type="button" data-full="lora-flight.jpg"><img src="lora-flight.jpg" width="1091" height="589" loading="lazy" alt="A drone hovering over an open field under a partly cloudy sky"></button><figcaption>Field testing the tracker on a drone.</figcaption></figure></div>
+          <div class="row">
+            <figure style="--ar:1.706"><button type="button" data-full="lora-enclosure.jpg"><img src="lora-enclosure.jpg" width="962" height="564" loading="lazy" alt="The gray tracker enclosure mounted on top of a drone"></button><figcaption>The enclosure mounted on the drone.</figcaption></figure>
+            <figure style="--ar:1.976"><button type="button" data-full="lora-board.jpg"><img src="lora-board.jpg" width="1377" height="697" loading="lazy" alt="The tracker's circuit board with a small display and GPS module wired inside the enclosure"></button><figcaption>Inside the enclosure: the LoRa board and GPS module.</figcaption></figure>
+          </div>
         </div>
       </div>
     </article>
 
     <!-- BOLT -->
     <article class="project" id="bolt">
-      <h3>BOLT electric superbike</h3>
-      <p class="kicker">Virginia Tech design team, powertrain and controls</p>
-      <div class="body">
-        <div>
-          <p>As part of the design team at Virginia Tech, I work on the powertrain and controls sub teams. I assembled the high-voltage battery pack and the full wiring harness, including the CAN bus configuration, for a competition electric motorcycle built on a 500 V architecture.</p>
-          <p>I am now working on the design of a next-generation all-electric dirt bike.</p>
-        </div>
-        <dl class="facts">
-          <dt>Built with</dt><dd>500 V battery pack, wiring harness, CAN bus</dd>
-        </dl>
+      <div class="p-head">
+        <h3>BOLT electric superbike</h3>
+        <p class="kicker">Virginia Tech design team, powertrain and controls</p>
       </div>
-      <div class="gallery">
-        <div class="row">
-          <figure style="--ar:1.761"><button type="button" data-full="bolt-team.jpg"><img src="bolt-team.jpg" width="611" height="347" loading="lazy" alt="The BOLT design team standing in rows in front of the motorcycle"></button><figcaption>The BOLT team.</figcaption></figure>
-          <figure style="--ar:1.918"><button type="button" data-full="bolt-bike.jpg"><img src="bolt-bike.jpg" width="821" height="428" loading="lazy" alt="The electric superbike with its battery pack and orange wiring exposed"></button><figcaption>The bike with its battery pack and harness.</figcaption></figure>
+      <div class="p-main">
+        <div class="body">
+          <div class="p-text">
+            <p>BOLT is the Virginia Tech student team that designs and builds a competition electric motorcycle. On the powertrain and controls sub teams, I assembled the 500 V battery pack and the full wiring harness, including the CAN bus setup that lets the bike's electronics talk to each other.</p>
+            <p>I'm now working on the design of a next-generation all-electric dirt bike.</p>
+          </div>
+          <dl class="facts">
+            <dt>Built with</dt><dd>500 V battery pack, wiring harness, CAN bus</dd>
+          </dl>
+        </div>
+        <div class="gallery">
+          <div class="row">
+            <figure style="--ar:1.761"><button type="button" data-full="bolt-team.jpg"><img src="bolt-team.jpg" width="611" height="347" loading="lazy" alt="The BOLT design team standing in rows in front of the motorcycle"></button><figcaption>The BOLT team.</figcaption></figure>
+            <figure style="--ar:1.918"><button type="button" data-full="bolt-bike.jpg"><img src="bolt-bike.jpg" width="821" height="428" loading="lazy" alt="The electric superbike with its battery pack and orange wiring exposed"></button><figcaption>The bike with its battery pack and harness.</figcaption></figure>
+          </div>
         </div>
       </div>
     </article>
-  </section>
 
-  <!-- ===================== BUILT FOR FUN ===================== -->
-  <section class="group" id="fun" aria-labelledby="fun-h">
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BUILT FOR FUN ===================== -->
+<section class="band alt" id="fun" aria-labelledby="fun-h">
+  <div class="wrap">
     <h2 id="fun-h">Built for fun</h2>
-    <p class="group-note">Personal projects, some purely for the joy of it and some a little more serious.</p>
+    <p class="section-note">Personal projects, purely for the love of the game.</p>
+
+    <div class="projects">
 
     <!-- Blood pressure -->
     <article class="project" id="bp">
-      <h3>Blood pressure monitor</h3>
-      <p class="kicker">Best in Class</p>
-      <div class="body">
-        <div>
-          <p>This blood pressure cuff relies on purely analog electronics to create an amplified voltage reading, which a microcontroller reads and sends wirelessly to any phone. It took months of troubleshooting and testing, but it ended up within 5% of a commercially available cuff.</p>
-          <p>I also built a web interface with a regression-tree chatbot (CART style) that lets you talk through your readings with an assistant. The whole application runs on 512 KB and needs no internet access, which helps in remote areas.</p>
-          <p>Software is easier to build than ever, but nothing replaces testing analog electronics on a bench.</p>
-        </div>
-        <dl class="facts">
-          <dt>Result</dt><dd>Readings within 5% of a commercial device</dd>
-          <dt>Signal chain</dt><dd>INA126P instrumentation amplifier, cascaded Sallen-Key filters, gain and DC bias</dd>
-          <dt>Software</dt><dd>Oscillometric algorithm for systolic, mean, and diastolic pressure, plus an offline assistant in 512 KB of RAM</dd>
-        </dl>
+      <div class="p-head">
+        <h3>Blood pressure monitor</h3>
+        <p class="kicker">Best in Class. Mostly analog electronics, accurate to within 5% of a commercial cuff</p>
       </div>
-      <div class="gallery">
-        <div class="row">
-          <figure style="--ar:1.746"><button type="button" data-full="bp-testing.jpg"><img src="bp-testing.jpg" width="1400" height="802" loading="lazy" alt="Me wearing the blood pressure cuff while wired electronics sit on the desk beside a laptop"></button><figcaption>Taking a reading with the prototype.</figcaption></figure>
-          <figure style="--ar:1.81"><button type="button" data-full="bp-breadboard.jpg"><img src="bp-breadboard.jpg" width="1339" height="740" loading="lazy" alt="A breadboard crowded with colored jumper wires and small circuit boards"></button><figcaption>The analog front end on a breadboard.</figcaption></figure>
+      <div class="p-main">
+        <div class="body">
+          <div class="p-text">
+            <p>I built a blood pressure monitor from scratch, mostly out of analog electronics. Analog circuits amplify and filter the tiny pressure signal from the cuff, a microcontroller turns it into systolic, mean, and diastolic readings, and the results appear wirelessly on any phone. It took months of troubleshooting and testing to get within 5% of a commercially available cuff.</p>
+            <p>The phone interface includes a chatbot, built on a regression tree (CART), that answers questions about your current and past readings with guidance based on medical guidelines. The whole thing runs on 512 KB of memory and needs no internet, which helps in remote areas.</p>
+          </div>
+          <dl class="facts">
+            <dt>Result</dt><dd>Readings within 5% of a commercial device</dd>
+            <dt>Signal chain</dt><dd>INA126P instrumentation amplifier, cascaded Sallen-Key filters, gain and DC bias</dd>
+            <dt>Software</dt><dd>Oscillometric algorithm for systolic, mean, and diastolic pressure, plus an offline assistant in 512 KB of RAM</dd>
+          </dl>
         </div>
-        <div class="row keep narrow">
-          <figure style="--ar:0.4496"><button type="button" data-full="bp-app-dashboard.jpg"><img src="bp-app-dashboard.jpg" width="514" height="1143" loading="lazy" alt="Phone screen showing systolic, mean arterial, diastolic, and heart rate readings with an assistant chat below"></button><figcaption>Live readings and the assistant.</figcaption></figure>
-          <figure style="--ar:0.4515"><button type="button" data-full="bp-app-stats.jpg"><img src="bp-app-stats.jpg" width="507" height="1123" loading="lazy" alt="Phone screen showing average readings and a history list with stage labels"></button><figcaption>Averages and history.</figcaption></figure>
+        <div class="gallery">
+          <div class="row">
+            <figure style="--ar:1.746"><button type="button" data-full="bp-testing.jpg"><img src="bp-testing.jpg" width="1400" height="802" loading="lazy" alt="Me wearing the blood pressure cuff while wired electronics sit on the desk beside a laptop"></button><figcaption>Taking a reading with the prototype.</figcaption></figure>
+            <figure style="--ar:1.81"><button type="button" data-full="bp-breadboard.jpg"><img src="bp-breadboard.jpg" width="1339" height="740" loading="lazy" alt="A breadboard crowded with colored jumper wires and small circuit boards"></button><figcaption>The analog front end on a breadboard.</figcaption></figure>
+          </div>
+          <div class="row keep narrow">
+            <figure style="--ar:0.4496"><button type="button" data-full="bp-app-dashboard.jpg"><img src="bp-app-dashboard.jpg" width="514" height="1143" loading="lazy" alt="Phone screen showing systolic, mean arterial, diastolic, and heart rate readings with an assistant chat below"></button><figcaption>Live readings and the assistant.</figcaption></figure>
+            <figure style="--ar:0.4515"><button type="button" data-full="bp-app-stats.jpg"><img src="bp-app-stats.jpg" width="507" height="1123" loading="lazy" alt="Phone screen showing average readings and a history list with stage labels"></button><figcaption>Averages and history.</figcaption></figure>
+          </div>
         </div>
       </div>
     </article>
 
     <!-- FPV -->
     <article class="project" id="fpv">
-      <h3>Custom FPV drone with an ESP32 flight controller</h3>
-      <p class="kicker">Personal project</p>
-      <div class="body">
-        <div>
-          <p>Designed, fabricated, and assembled a custom PCB flight controller around an ESP32, and programmed the flight logic in C++ with ArduPilot integration. I built a fully custom FPV drone from the frame up alongside it.</p>
-          <p>Does it fly? Yes. Does it fly super well? Let's just say I wouldn't trust it, but I learned a lot.</p>
-        </div>
-        <dl class="facts">
-          <dt>Built with</dt><dd>Custom 5-layer PCB with the IMU, barometer, and ESC drive on one board; ArduPilot ported to the hardware; C++ flight logic</dd>
-        </dl>
+      <div class="p-head">
+        <h3>Custom FPV drone with an ESP32 flight controller</h3>
+        <p class="kicker">A drone where I built everything, including its brain</p>
       </div>
-      <div class="gallery">
-        <div class="row small keep">
-          <figure style="--ar:0.774"><button type="button" data-full="fpv-pcb-layout.jpg"><img src="fpv-pcb-layout.jpg" width="407" height="526" loading="lazy" alt="PCB layout of the ESP32 flight controller with colored routing traces"></button><figcaption>PCB layout.</figcaption></figure>
-          <figure style="--ar:0.769"><button type="button" data-full="fpv-pcb-render.jpg"><img src="fpv-pcb-render.jpg" width="349" height="454" loading="lazy" alt="Black render of the flight controller board showing component labels"></button><figcaption>Board render.</figcaption></figure>
+      <div class="p-main">
+        <div class="body">
+          <div class="p-text">
+            <p>I designed and assembled my own flight controller board around an ESP32, ported ArduPilot to run on it, and wrote the flight logic in C++. I also built the drone itself, frame up, to fly with it.</p>
+            <p>Does it fly? Yes. Does it fly super well? Let's just say I wouldn't trust it, but I learned a lot.</p>
+          </div>
+          <dl class="facts">
+            <dt>Built with</dt><dd>Custom 5-layer PCB with the IMU, barometer, and motor drivers on one board; ArduPilot ported to the hardware; C++ flight logic</dd>
+          </dl>
         </div>
-        <div class="row medium">
-          <figure style="--ar:2.308"><button type="button" data-full="fpv-drone.jpg"><img src="fpv-drone.jpg" width="674" height="292" loading="lazy" alt="The assembled carbon-fiber FPV drone on a table"></button><figcaption>The finished frame.</figcaption></figure>
-          <figure style="--ar:1.994"><button type="button" data-full="fpv-schematic.jpg"><img src="fpv-schematic.jpg" width="720" height="361" loading="lazy" alt="Circuit schematic of the flight controller in a design tool"></button><figcaption>The schematic.</figcaption></figure>
+        <div class="gallery">
+          <div class="row small keep">
+            <figure style="--ar:0.774"><button type="button" data-full="fpv-pcb-layout.jpg"><img src="fpv-pcb-layout.jpg" width="407" height="526" loading="lazy" alt="PCB layout of the ESP32 flight controller with colored routing traces"></button><figcaption>PCB layout.</figcaption></figure>
+            <figure style="--ar:0.769"><button type="button" data-full="fpv-pcb-render.jpg"><img src="fpv-pcb-render.jpg" width="349" height="454" loading="lazy" alt="Black render of the flight controller board showing component labels"></button><figcaption>Board render.</figcaption></figure>
+          </div>
+          <div class="row medium">
+            <figure style="--ar:2.308"><button type="button" data-full="fpv-drone.jpg"><img src="fpv-drone.jpg" width="674" height="292" loading="lazy" alt="The assembled carbon-fiber FPV drone on a table"></button><figcaption>The finished frame.</figcaption></figure>
+            <figure style="--ar:1.994"><button type="button" data-full="fpv-schematic.jpg"><img src="fpv-schematic.jpg" width="720" height="361" loading="lazy" alt="Circuit schematic of the flight controller in a design tool"></button><figcaption>The schematic.</figcaption></figure>
+          </div>
         </div>
       </div>
     </article>
 
     <!-- Helmet -->
     <article class="project" id="helmet">
-      <h3>Iron Man helmet</h3>
-      <p class="kicker">Personal project</p>
-      <div class="body">
-        <div>
-          <p>I have always been a huge Iron Man fan, so I made his helmet from scratch. I modeled everything in CAD, then 3D printed, sanded, and painted it. It is custom fitted to my head, so it is not that uncomfortable to wear.</p>
-          <p>It is fully motorized with its own power source: one button opens it and lights it up, and it can charge my phone.</p>
-        </div>
-        <dl class="facts">
-          <dt>Built with</dt><dd>CAD, 3D printing, a motorized opening mechanism, and a built-in battery with phone charging</dd>
-        </dl>
+      <div class="p-head">
+        <h3>Iron Man helmet</h3>
+        <p class="kicker">A wearable, motorized helmet made from scratch</p>
       </div>
-      <div class="gallery">
-        <div class="row small"><figure style="--ar:0.873"><button type="button" data-full="helmet.jpg"><img src="helmet.jpg" width="275" height="315" loading="lazy" alt="Red and silver Iron Man helmet with a textured gray faceplate"></button><figcaption>The finished helmet.</figcaption></figure></div>
+      <div class="p-main">
+        <div class="body">
+          <div class="p-text">
+            <p>I've been a huge Iron Man fan since I was a kid, so I made his helmet from scratch. I modeled everything in CAD, then 3D printed, sanded, and painted it, and fitted it to my head so it's actually comfortable to wear.</p>
+            <p>It's fully motorized with its own power source: one button opens it and lights it up, and it can charge my phone.</p>
+          </div>
+          <dl class="facts">
+            <dt>Built with</dt><dd>CAD, 3D printing, a motorized opening mechanism, and a built-in battery with phone charging</dd>
+          </dl>
+        </div>
+        <div class="gallery">
+          <div class="row small"><figure style="--ar:0.873"><button type="button" data-full="helmet.jpg"><img src="helmet.jpg" width="275" height="315" loading="lazy" alt="Red and silver Iron Man helmet with a textured gray faceplate"></button><figcaption>The finished helmet.</figcaption></figure></div>
+        </div>
       </div>
     </article>
-  </section>
 
-  <!-- ===================== LEADERSHIP ===================== -->
-  <section class="group" id="leadership" aria-labelledby="lead-h">
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LEADERSHIP ===================== -->
+<section class="band" id="leadership" aria-labelledby="lead-h">
+  <div class="wrap">
     <h2 id="lead-h">Leadership</h2>
     <div class="two">
       <div>
         <h3>Captain, FIRST Tech Challenge team 14069</h3>
-        <p>Led 15 members across software, electronics, and mechanical design. The team won the Inspire Award, FTC's top design honor, and three District Championships. I was also a FIRST Dean's List Scholarship Semifinalist.</p>
+        <p>I led 15 members across software, electronics, and mechanical design. The team won the Inspire Award, FTC's top design honor, and three District Championships. I was also a FIRST Dean's List Scholarship Semifinalist.</p>
       </div>
       <div>
         <h3>STEM Access Initiative</h3>
-        <p>Helped deliver middle-school robotics across Virginia through a $520K Google-funded program, working with Google executives, elected officials, and YouTuber Mark Rober. I also ran a summer camp for more than 50 students through local makerspaces.</p>
+        <p>I helped deliver middle-school robotics across Virginia through a $520K Google-funded program, working with Google executives, elected officials, and YouTuber Mark Rober. I also ran a summer camp for more than 50 students through local makerspaces.</p>
       </div>
     </div>
-  </section>
-  </main>
+  </div>
+</section>
 
-  <footer id="contact">
-    <p class="big">I have more projects than fit on this page. Ask and I'll share them.</p>
-    <p><a href="mailto:agasthyabreddy@gmail.com">agasthyabreddy@gmail.com</a> &nbsp; <a href="https://www.linkedin.com/in/agasthya-reddy">linkedin.com/in/agasthya-reddy</a></p>
-    <p>Updated October 2026.</p>
-  </footer>
-</div>
+</main>
+
+<!-- ===================== CONTACT ===================== -->
+<section class="contact" id="contact" aria-labelledby="contact-h">
+  <div class="wrap">
+    <h2 id="contact-h">Get in touch</h2>
+    <p>Questions, opportunities, or a project you want to talk about? Email is the fastest way to reach me, and I have more projects than fit on this page.</p>
+    <a class="big-email" href="mailto:agasthyabreddy@gmail.com">agasthyabreddy@gmail.com</a>
+    <div class="cta">
+      <a class="btn primary" href="mailto:agasthyabreddy@gmail.com">Send an email</a>
+      <a class="btn" href="https://www.linkedin.com/in/agasthya-reddy">Connect on LinkedIn</a>
+    </div>
+  </div>
+</section>
+<footer class="foot"><div class="wrap"><p>Updated October 2026.</p></div></footer>
+
+<aside class="hud" id="hud" aria-label="Decorative flight readout">
+  <div class="hud-row" aria-hidden="true">
+    <div><span class="k">Altitude</span><span class="v"><span data-alt>7.0</span> m</span></div>
+    <div><span class="k">Chemical</span><span class="v"><span data-chem>0.0</span> ppm</span></div>
+    <div><span class="k">Distance</span><span class="v"><span data-dist>1200</span> m</span></div>
+    <div><span class="k">Flight state</span><span class="v state" data-state>Idle</span></div>
+  </div>
+  <button type="button" class="hud-x" id="hud-x" aria-label="Hide flight readout">&times;</button>
+</aside>
 
 <dialog id="viewer" aria-label="Enlarged image">
   <img id="viewer-img" alt="">
@@ -363,24 +572,321 @@
 
 <script>
   (function () {
+    /* Lightbox */
     var dlg = document.getElementById('viewer');
-    if (!dlg || !dlg.showModal) return;
-    var img = document.getElementById('viewer-img');
-    var cap = document.getElementById('viewer-cap');
-    document.querySelectorAll('figure button').forEach(function (b) {
-      b.addEventListener('click', function () {
-        var small = b.querySelector('img');
-        img.src = b.getAttribute('data-full');
-        img.alt = small.alt;
-        var fc = b.parentNode.querySelector('figcaption');
-        cap.textContent = fc ? fc.textContent : '';
-        dlg.showModal();
+    if (dlg && dlg.showModal) {
+      var img = document.getElementById('viewer-img');
+      var cap = document.getElementById('viewer-cap');
+      document.querySelectorAll('figure button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var small = b.querySelector('img');
+          img.src = b.getAttribute('data-full');
+          img.alt = small.alt;
+          var fc = b.parentNode.querySelector('figcaption');
+          cap.textContent = fc ? fc.textContent : '';
+          dlg.showModal();
+        });
+        b.setAttribute('aria-label', 'Enlarge image: ' + b.querySelector('img').alt);
       });
-      b.setAttribute('aria-label', 'Enlarge image: ' + b.querySelector('img').alt);
-    });
-    document.getElementById('viewer-close').addEventListener('click', function () { dlg.close(); });
-    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+      document.getElementById('viewer-close').addEventListener('click', function () { dlg.close(); });
+      dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+    }
+
+    /* Highlight the current section in the top bar */
+    var links = {};
+    document.querySelectorAll('.bar nav a[href^="#"]').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          Object.keys(links).forEach(function (k) { links[k].removeAttribute('aria-current'); });
+          if (links[e.target.id]) links[e.target.id].setAttribute('aria-current', 'true');
+        });
+      }, { rootMargin: '-35% 0px -60% 0px' });
+      ['top', 'about', 'work', 'fun', 'leadership', 'contact'].forEach(function (id) {
+        var el = document.getElementById(id); if (el) io.observe(el);
+      });
+    }
   })();
+</script>
+
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tabHidden = false;
+  document.addEventListener('visibilitychange', function () { tabHidden = document.hidden; });
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function smooth(a, b, x) { var t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); }
+  function onVisible(el, on, off) {
+    if (!('IntersectionObserver' in window)) { on(); return; }
+    new IntersectionObserver(function (es) { es[0].isIntersecting ? on() : off(); }, { threshold: 0 }).observe(el);
+  }
+
+  /* =============== Flight readout =============== */
+  (function hud() {
+    var el = document.getElementById('hud'); if (!el) return;
+    var alt = el.querySelector('[data-alt]'), chem = el.querySelector('[data-chem]'),
+        dist = el.querySelector('[data-dist]'), state = el.querySelector('[data-state]');
+    var ids = ['top', 'about', 'work', 'fun', 'leadership', 'contact'];
+    var names = { top: 'Idle', about: 'Climb', work: 'Tracking', fun: 'Cruise', leadership: 'Approach', contact: 'Source' };
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var f = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      alt.textContent = (7 + 60 * Math.sin(f * Math.PI)).toFixed(1);
+      chem.textContent = (29.3 * f * f).toFixed(1);
+      dist.textContent = Math.round((1 - f) * 1200);
+      var cur = 'top', y = window.innerHeight * 0.4;
+      ids.forEach(function (id) { var e = document.getElementById(id); if (e && e.getBoundingClientRect().top <= y) cur = id; });
+      if (max > 0 && window.scrollY >= max - 4) cur = 'contact';
+      state.textContent = names[cur];
+    }
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', update);
+    document.getElementById('hud-x').addEventListener('click', function () { el.hidden = true; });
+    update();
+  })();
+
+  /* =============== Terrain flyover =============== */
+  (function terrain() {
+    var cv = document.getElementById('terrain-bg'); if (!cv || !cv.getContext) return;
+    var hero = cv.parentNode, ctx = cv.getContext('2d');
+    var W = 0, H = 0, dpr = 1, running = false, raf = 0, last = 0, t = reduce ? 14 : rand(0, 40);
+    var bg = '#f6f6f4', ink = '#1f2933', acc = '#0e7490', trail = [], trailAcc = 0;
+    var CELL = 1.9, NX = 30, NZ = 19, PX = new Float32Array((NX + 1) * (NZ + 1)), PY = new Float32Array((NX + 1) * (NZ + 1)), PD = new Float32Array((NX + 1) * (NZ + 1)), acc2 = 0;
+
+    function readColors() {
+      var cs = getComputedStyle(hero), r = getComputedStyle(document.documentElement);
+      var b = cs.backgroundColor; bg = (b && b !== 'rgba(0, 0, 0, 0)' && b !== 'transparent') ? b : (r.getPropertyValue('--bg').trim() || bg);
+      ink = r.getPropertyValue('--ink').trim() || ink; acc = r.getPropertyValue('--accent').trim() || acc;
+    }
+    function size() {
+      dpr = Math.min(1, window.devicePixelRatio || 1);
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      readColors();
+    }
+    function h(x, z) {
+      return 2.1 * Math.sin(x * 0.21 + 0.7) * Math.sin(z * 0.17 + 0.3) + 1.3 * Math.sin(x * 0.47 + z * 0.31)
+           + 0.55 * Math.sin(x * 0.93 - z * 0.62 + 1.2) + 0.9 * Math.sin(z * 0.09 - x * 0.05);
+    }
+    function dpos(u) {
+      var x = 7 * Math.sin(0.17 * u) + 2.5 * Math.sin(0.43 * u + 1), z = 3.2 * u;
+      var y = Math.max(h(x, z), h(x, z + 2.5), h(x, z + 5)) + 2.3 + 0.5 * Math.sin(0.6 * u);
+      return { x: x, y: y, z: z };
+    }
+    // camera state, set per frame
+    var C = { x: 0, y: 0, z: 0, cy: 1, sy: 0, cp: 1, sp: 0, f: 800, ox: 0, oy: 0 };
+    function proj(px, py, pz, out) {
+      var dx = px - C.x, dy = py - C.y, dz = pz - C.z;
+      var x1 = dx * C.cy - dz * C.sy, z1 = dx * C.sy + dz * C.cy;
+      var y2 = dy * C.cp + z1 * C.sp, z2 = -dy * C.sp + z1 * C.cp;
+      if (z2 < 0.4) z2 = 0.4;
+      out.x = C.ox + C.f * x1 / z2; out.y = C.oy - C.f * y2 / z2; out.d = z2;
+    }
+    function frame() {
+      ctx.clearRect(0, 0, W, H);
+      var d = dpos(t), d2 = dpos(t + 0.06), cam = dpos(t - 2.7);
+      var yawD = Math.atan2(d2.x - d.x, d2.z - d.z);
+      var yawD0 = Math.atan2(d.x - dpos(t - 0.06).x, d.z - dpos(t - 0.06).z);
+      var turn = (yawD - yawD0) / 0.06;
+      var cx = cam.x, cyy = cam.y + 3.4, cz = cam.z;
+      var lx = d.x - cx, ly = d.y - cyy, lz = d.z - cz;
+      var yaw = Math.atan2(lx, lz), pitch = Math.atan2(-ly, Math.sqrt(lx * lx + lz * lz)) + 0.1;
+      C.x = cx; C.y = cyy; C.z = cz; C.cy = Math.cos(yaw); C.sy = Math.sin(yaw); C.cp = Math.cos(pitch); C.sp = Math.sin(pitch);
+      C.f = Math.max(H * 0.95, W * 0.45); C.ox = W * 0.78; C.oy = H * 0.46;
+
+      // ---- terrain: surface strips drawn far to near (about 1x overdraw) ----
+      var x0 = Math.floor(cx / CELL) * CELL - (NX / 2) * CELL, z0 = Math.floor(cz / CELL) * CELL - 3 * CELL;
+      var p = { x: 0, y: 0, d: 0 }, i, j, o;
+      for (j = 0; j < NZ; j++) {
+        var zz = z0 + j * CELL;
+        for (i = 0; i <= NX; i++) { var xx = x0 + i * CELL; proj(xx, h(xx, zz), zz, p); o = j * (NX + 1) + i; PX[o] = p.x; PY[o] = p.y; PD[o] = p.d; }
+      }
+      ctx.lineWidth = 1; ctx.lineJoin = 'round'; ctx.strokeStyle = acc;
+      for (j = NZ - 1; j >= 1; j--) {
+        var far = j * (NX + 1), near = (j - 1) * (NX + 1);
+        var a = 0.95 * (1 - smooth(14, 38, PD[near + (NX >> 1)]));
+        if (a < 0.02) continue;
+        ctx.beginPath(); ctx.moveTo(PX[far], PY[far]);
+        for (i = 1; i <= NX; i++) ctx.lineTo(PX[far + i], PY[far + i]);
+        for (i = NX; i >= 0; i--) ctx.lineTo(PX[near + i], PY[near + i]);
+        ctx.closePath(); ctx.globalAlpha = 1; ctx.fillStyle = bg; ctx.fill();
+        ctx.globalAlpha = a; ctx.beginPath(); ctx.moveTo(PX[far], PY[far]);
+        for (i = 1; i <= NX; i++) ctx.lineTo(PX[far + i], PY[far + i]);
+        for (i = 0; i <= NX; i++) { ctx.moveTo(PX[far + i], PY[far + i]); ctx.lineTo(PX[near + i], PY[near + i]); }
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+
+      // ---- shadow ----
+      var gy = h(d.x, d.z) + 0.05, q = { x: 0, y: 0, d: 0 };
+      ctx.beginPath();
+      for (var k = 0; k < 14; k++) { var ang = k / 14 * 6.2832; proj(d.x + 0.8 * Math.cos(ang), gy, d.z + 0.8 * Math.sin(ang), q); k ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y); }
+      ctx.closePath(); ctx.fillStyle = ink; ctx.globalAlpha = 0.12; ctx.fill(); ctx.globalAlpha = 1;
+
+      // ---- trail ----
+      if (trail.length > 1) {
+        ctx.lineWidth = 1.5; ctx.strokeStyle = acc;
+        for (var n = 1; n < trail.length; n++) {
+          var A = trail[n - 1], B = trail[n], pa = {}, pb = {};
+          proj(A.x, A.y, A.z, pa); proj(B.x, B.y, B.z, pb);
+          ctx.globalAlpha = 0.4 * n / trail.length; ctx.beginPath(); ctx.moveTo(pa.x, pa.y); ctx.lineTo(pb.x, pb.y); ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      // ---- hexacopter ----
+      var roll = Math.max(-0.45, Math.min(0.45, -turn * 1.6)), pit = 0.14, S = 0.5;
+      var cr = Math.cos(roll), sr = Math.sin(roll), cpp = Math.cos(pit), spp = Math.sin(pit), cyd = Math.cos(yawD), syd = Math.sin(yawD);
+      function place(lx, ly, lz, out) {
+        var x = lx * cr - ly * sr, y = lx * sr + ly * cr, z = lz;           // roll about z
+        var y2 = y * cpp - z * spp, z2 = y * spp + z * cpp;                  // pitch about x
+        var x3 = x * cyd + z2 * syd, z3 = -x * syd + z2 * cyd;               // yaw about y
+        proj(d.x + x3 * S, d.y + y2 * S, d.z + z3 * S, out);
+      }
+      var c0 = { x: 0, y: 0 }, r1 = { x: 0, y: 0 }, r2 = { x: 0, y: 0 }, spin = t * 38;
+      place(0, 0, 0, c0);
+      ctx.strokeStyle = ink; ctx.fillStyle = ink; ctx.lineCap = 'round';
+      for (var m = 0; m < 6; m++) {
+        var a0 = m * 1.0472 + 0.5236, ax = Math.sin(a0) * 1.55, az = Math.cos(a0) * 1.55;
+        var back = az < 0;
+        place(ax, 0.05, az, r1);
+        ctx.globalAlpha = 0.9; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(c0.x, c0.y); ctx.lineTo(r1.x, r1.y); ctx.stroke();
+        // rotor disc
+        ctx.lineWidth = 1; ctx.globalAlpha = back ? 0.35 : 0.55; ctx.beginPath();
+        for (var g = 0; g <= 16; g++) { var b = g / 16 * 6.2832; place(ax + 0.78 * Math.cos(b), 0.3, az + 0.78 * Math.sin(b), r2); g ? ctx.lineTo(r2.x, r2.y) : ctx.moveTo(r2.x, r2.y); }
+        ctx.stroke();
+        // blur of spinning blades
+        ctx.lineWidth = 1.4; ctx.globalAlpha = 0.8; ctx.beginPath();
+        for (var bl = 0; bl < 2; bl++) {
+          var sa = spin * (m % 2 ? 1 : -1) + bl * 3.1416;
+          place(ax + 0.78 * Math.cos(sa), 0.3, az + 0.78 * Math.sin(sa), r1); place(ax - 0.78 * Math.cos(sa), 0.3, az - 0.78 * Math.sin(sa), r2);
+          ctx.moveTo(r1.x, r1.y); ctx.lineTo(r2.x, r2.y);
+        }
+        ctx.stroke();
+        // motor
+        place(ax, 0.2, az, r1); ctx.globalAlpha = 0.95; ctx.beginPath(); ctx.arc(r1.x, r1.y, 2.1, 0, 6.2832); ctx.fill();
+      }
+      // body + sensor mast
+      ctx.globalAlpha = 0.95; ctx.beginPath(); ctx.arc(c0.x, c0.y, 4, 0, 6.2832); ctx.fill();
+      place(0, -0.55, 0.5, r1); ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(c0.x, c0.y); ctx.lineTo(r1.x, r1.y); ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // trail bookkeeping
+      trailAcc += 1;
+      if (trailAcc >= 3) { trailAcc = 0; trail.push({ x: d.x, y: d.y, z: d.z }); if (trail.length > 22) trail.shift(); }
+    }
+    function loop(ts) {
+      if (!running) return;
+      raf = requestAnimationFrame(loop);
+      if (tabHidden) { last = ts; return; }
+      var dt = Math.min(0.05, (ts - last) / 1000); last = ts; acc2 += dt; if (acc2 < 0.032) return; t += acc2; acc2 = 0;
+      frame();
+    }
+    function start() { if (running || reduce) return; running = true; last = performance.now(); raf = requestAnimationFrame(loop); }
+    function stop() { running = false; cancelAnimationFrame(raf); }
+    size(); frame();
+    window.addEventListener('resize', function () { size(); frame(); });
+    if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { readColors(); frame(); }); } catch (e) {} }
+    onVisible(hero, start, stop);
+  })();
+
+  /* =============== Spectrum strip =============== */
+  (function spectrum() {
+    var strip = document.getElementById('spectrum'), sc = document.getElementById('spec');
+    if (!strip || !sc || !sc.getContext) return;
+    var sx = sc.getContext('2d');
+    var SW = 800, SH = 96, TOP = 36, st = 0, pointer = null, vals, sm, row, pal = [];
+
+    (function buildPalette() {
+      var stops = [[0, [6, 18, 28]], [0.30, [10, 52, 92]], [0.58, [24, 108, 156]], [0.80, [53, 195, 214]], [1, [236, 255, 255]]];
+      for (var i = 0; i < 256; i++) {
+        var v = i / 255, a = stops[0], b = stops[stops.length - 1];
+        for (var k = 0; k < stops.length - 1; k++) if (v >= stops[k][0] && v <= stops[k + 1][0]) { a = stops[k]; b = stops[k + 1]; break; }
+        var f = (v - a[0]) / (b[0] - a[0] || 1);
+        pal.push([a[1][0] + (b[1][0] - a[1][0]) * f, a[1][1] + (b[1][1] - a[1][1]) * f, a[1][2] + (b[1][2] - a[1][2]) * f]);
+      }
+    })();
+
+    function size() {
+      SW = Math.max(300, Math.min(1400, Math.round(strip.clientWidth)));
+      sc.width = SW; sc.height = SH;
+      vals = new Float32Array(SW); sm = new Float32Array(SW); row = sx.createImageData(SW, 1);
+      sx.fillStyle = '#07131d'; sx.fillRect(0, 0, SW, SH);
+    }
+    function spikes() {
+      var list = [{ x: 0.5 + 0.42 * Math.sin(st * 0.4), a: 0.85 }];
+      if (pointer !== null) list.push({ x: pointer, a: 0.9 + Math.random() * 0.1 });
+      return list;
+    }
+    function makeRow() {
+      var sp = spikes();
+      for (var i = 0; i < SW; i++) {
+        var x = i / SW, ch = x * 12, k = Math.floor(ch), w = ch - k;
+        var shape = smooth(0.06, 0.16, w) * (1 - smooth(0.84, 0.94, w));
+        var v = 0.10 + Math.random() * 0.04 + shape * (0.40 + 0.16 * Math.sin(st * 0.5 + k * 1.9) + (Math.random() - 0.5) * 0.14);
+        for (var j = 0; j < sp.length; j++) { var q = (x - sp[j].x) / 0.0045; v += sp[j].a * Math.exp(-q * q); }
+        vals[i] = v > 1 ? 1 : v < 0 ? 0 : v;
+      }
+      return sp;
+    }
+    function render(sp) {
+      sx.drawImage(sc, 0, TOP, SW, SH - TOP - 1, 0, TOP + 1, SW, SH - TOP - 1);
+      for (var i = 0; i < SW; i++) {
+        var c = pal[(vals[i] * 255) | 0], o = i * 4;
+        row.data[o] = c[0]; row.data[o + 1] = c[1]; row.data[o + 2] = c[2]; row.data[o + 3] = 255;
+      }
+      sx.putImageData(row, 0, TOP);
+      sx.fillStyle = '#07131d'; sx.fillRect(0, 0, SW, TOP);
+      sx.strokeStyle = 'rgba(95,212,230,0.10)'; sx.lineWidth = 1;
+      for (var g = 1; g < 12; g++) { var gx = Math.round(g * SW / 12) + 0.5; sx.beginPath(); sx.moveTo(gx, 0); sx.lineTo(gx, TOP); sx.stroke(); }
+      for (var m = 0; m < SW; m++) { var a = vals[Math.max(0, m - 1)], b = vals[m], c2 = vals[Math.min(SW - 1, m + 1)]; sm[m] = (a + b + c2) / 3; }
+      var y0 = TOP - 3, ph = TOP - 9;
+      sx.beginPath(); sx.moveTo(0, y0);
+      for (var n = 0; n < SW; n += 2) sx.lineTo(n, y0 - sm[n] * ph);
+      sx.lineTo(SW, y0); sx.closePath();
+      var gr = sx.createLinearGradient(0, 0, 0, TOP); gr.addColorStop(0, 'rgba(53,195,214,0.38)'); gr.addColorStop(1, 'rgba(53,195,214,0.04)');
+      sx.fillStyle = gr; sx.fill();
+      sx.beginPath(); for (var q2 = 0; q2 < SW; q2 += 2) { var yy = y0 - sm[q2] * ph; q2 ? sx.lineTo(q2, yy) : sx.moveTo(q2, yy); }
+      sx.strokeStyle = '#5fd4e6'; sx.lineWidth = 1; sx.stroke();
+      sx.font = '10px "IBM Plex Sans", system-ui, sans-serif';
+      for (var s = 0; s < sp.length; s++) {
+        var px = sp[s].x * SW, label = 'CFAR hit', tw = sx.measureText(label).width;
+        sx.strokeStyle = '#f2b84b'; sx.lineWidth = 1.2; sx.strokeRect(px - 6, 2, 12, TOP - 4);
+        sx.fillStyle = '#f2b84b';
+        var lx = px + 10 + tw > SW - 4 ? px - 10 - tw : px + 10;
+        sx.fillText(label, lx, 13);
+      }
+    }
+    function tick() { st += 1 / 30; render(makeRow()); }
+
+    size();
+    var gx = function (e) { var r = sc.getBoundingClientRect(); pointer = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); };
+    if (reduce) {
+      for (var i = 0; i < SH - TOP; i++) tick();
+      return;
+    }
+    sc.addEventListener('pointermove', gx);
+    sc.addEventListener('pointerdown', gx);
+    sc.addEventListener('pointerleave', function () { pointer = null; });
+    sc.addEventListener('pointerup', function (e) { if (e.pointerType !== 'mouse') pointer = null; });
+
+    var raf = 0, lastRow = 0, running = false;
+    function frame(ts) {
+      raf = requestAnimationFrame(frame);
+      if (tabHidden || ts - lastRow < 33) return;
+      lastRow = ts; tick();
+    }
+    function start() { if (!running) { running = true; raf = requestAnimationFrame(frame); } }
+    function stop() { running = false; cancelAnimationFrame(raf); }
+    var rt = 0;
+    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(size, 200); });
+    onVisible(strip, start, stop);
+  })();
+})();
 </script>
 </body>
 </html>
